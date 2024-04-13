@@ -1,0 +1,52 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Run Dev",
+            "type": "shell",
+            "command": "npm run dev",
+
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Run Prod",
+            "type": "shell",
+            "command": "npm run build && npm run generate",
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Run QuickCommit",
+            "type": "shell",
+            "command": "git add . && git commit -am '🚧 Work in Progress' && git push",
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+
+        {
+            "label": "Run Deploy",
+            "type": "shell",
+            "command": "git add . && git commit -am '🚀 Deploy' && git push",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "dependsOn": ["Run Prod"],
+            "problemMatcher": []
+        }
+    ],
+    "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+    }
+}
