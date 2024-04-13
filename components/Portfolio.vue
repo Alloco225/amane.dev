@@ -1,27 +1,31 @@
 <template>
   <div>
-    <section>
-      <div>
-        <h1>hero text copy</h1>
-        <h2>Hero description</h2>
-        <button>Main action</button>
-      </div>
-      <div>
-        <div>Objet1</div>
-        <div>Objet2</div>
-        <div>Objet3</div>
-      </div>
-    </section>
-
+    <div id="scene-container"></div>
+    <div id="info">Description</div>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'Portfolio',
-}
+  name: "Portfolio",
+};
 </script>
 
 <style>
+#scene-container {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+}
 
+#info {
+	position: absolute;
+	top: 10px;
+	width: 100%;
+	text-align: center;
+	z-index: 100;
+	display:block;
+}
 </style>
