@@ -17,6 +17,10 @@ try {
   document.body.appendChild(renderer.domElement);
 
 
+  const controls = new OrbitControls(camera, renderer.domElement);
+
+
+  scene.background = new THREE.Color(0xBCD48F);
   // Lights
 
   const pointLight = new THREE.PointLight(0xffffff);
@@ -32,19 +36,19 @@ try {
 
   const loader = new GLTFLoader();
 
-  const dracoLoader = new DRACOLoader();
-  dracoLoader.setDecoderPath('draco/');
-  loader.setDRACOLoader(dracoLoader);
+  // const dracoLoader = new DRACOLoader();
+  // dracoLoader.setDecoderPath('draco/');
+  // loader.setDRACOLoader(dracoLoader);
 
-  loader.load('/assets/models/Man/Man7.glb', function (gltf) {
-    console.log("loaded gltf");
-    scene.add(gltf.scene);
+  // loader.load('/assets/models/Man/Man7.glb', function (gltf) {
+  //   console.log("loaded gltf");
+  //   scene.add(gltf.scene);
 
-  }, undefined, function (error) {
+  // }, undefined, function (error) {
 
-    console.error(error);
+  //   console.error(error);
 
-  });
+  // });
 
 
 
@@ -66,8 +70,8 @@ try {
 
   // Background
 
-  const spaceTexture = new THREE.TextureLoader().load('/assets/space.jpg');
-  scene.background = spaceTexture;
+  // const spaceTexture = new THREE.TextureLoader().load('/assets/space.jpg');
+  // scene.background = spaceTexture;
 
   // Avatar
 
@@ -83,6 +87,14 @@ try {
   const cube = new THREE.Mesh(geometry, material);
   cube.position.x = -1
   scene.add(cube);
+
+  window.addEventListener('wheel', onScroll)
+
+
+  function onScroll(e){
+    console.log("onScroll", e.deltaY)
+    camera.position.z += .5 * e.deltaY;
+  }
 
 
   const pmaterial = new THREE.LineBasicMaterial({ color: 0x0000ff });
@@ -100,7 +112,9 @@ try {
   camera.position.z = 5;
 
   function animate() {
+    controls.update();
     requestAnimationFrame(animate);
+
 
     // camera.position.z += 0.2
     cube.rotation.x += 0.01;

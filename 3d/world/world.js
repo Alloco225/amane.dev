@@ -13,9 +13,9 @@ let renderer;
 let scene;
 let loop;
 
-let terrain = createTerrain({
-  color: '#fe33aa',
-});
+// let terrain = createTerrain({
+//   color: '#fe33aa',
+// });
 
 
 class World {
@@ -48,9 +48,10 @@ class World {
 
 
     loop.updatables.push(light);
-    loop.updatables.push(terrain);
+    // loop.updatables.push(terrain);
 
-    scene.add(light, terrain);
+    // scene.add(light, terrain);
+    scene.add(light);
   }
   stop() {
     loop.stop();
