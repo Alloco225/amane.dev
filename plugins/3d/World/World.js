@@ -9,6 +9,7 @@ import { createDonut } from '../components/meshes/donut.js';
 import { createTriangle } from '../components/meshes/triangle.js';
 import { createDirectionalLight, createPointLight, createReactAreaLight, createSpotLight, } from '../components/lights.js';
 import { Loop } from '../systems/Loop.js';
+import { createControls } from '../systems/controls.js';
 
 // These variables are module-scoped: we cannot access them
 // from outside the module
@@ -22,11 +23,17 @@ class World {
     camera = createCamera();
     renderer = createRenderer();
     scene = createScene();
+    //
+    const controls = createControls(camera, renderer.domElement);
+
+    //
     loop = new Loop(camera, scene, renderer);
     container.append(renderer.domElement);
 
 
     //
+    loop.updatables.push(controls)
+
 
     const sunLight = createDirectionalLight({color: 'red', intensity: 2});
     sunLight.position.set(-10, 10, 10)
@@ -58,6 +65,23 @@ class World {
     loop.updatables.push(cube)
     loop.updatables.push(donut)
 
+    // Controls
+    controls.target.copy(cube.position)
+
+
+    // setTimeout(() => {
+    //   // move the camera
+    //   camera.position.set(1, 2, 3);
+
+    //   // and/or rotate the camera
+    //   camera.rotation.set(0.5, 0, 0);
+
+    //   // then tell the controls to update
+    //   // controls.update();
+
+    // }, 3000);
+
+
     //
     scene.add(sunLight);
     scene.add(spotLight);
@@ -73,6 +97,10 @@ class World {
     resizer.onResize = ()=>{
       // this.render();
     }
+
+    controls.addEventListener('change', () => {
+      // this.render();
+    });
   }
 
   render() {
