@@ -14,10 +14,22 @@ function createCube({ color = null } = {}) {
 
   const radiansPerSecond = THREE.MathUtils.degToRad(30)
 
+  let distancePerSecond = new THREE.Vector2(4, 1);
+
   cube.tick = (delta) =>{
     cube.rotation.x += radiansPerSecond * delta;
     cube.rotation.y += radiansPerSecond * delta;
     cube.rotation.z += radiansPerSecond * delta;
+
+    cube.position.x += distancePerSecond.x * delta;
+    cube.position.y += distancePerSecond.y * delta;
+
+    if(Math.abs(cube.position.x) >= 4){
+      distancePerSecond.x *= -1;
+    }
+    if(Math.abs(cube.position.y) >= 3){
+      distancePerSecond.y *= -1;
+    }
   }
 
   return cube;
