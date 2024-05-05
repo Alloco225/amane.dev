@@ -7,7 +7,7 @@ import { createRenderer } from '../systems/renderer.js';
 import { Resizer } from '../systems/Resizer.js';
 import { createDonut } from '../components/meshes/donut.js';
 import { createTriangle } from '../components/meshes/triangle.js';
-import { createDirectionalLight, createPointLight, createReactAreaLight, createSpotLight, } from '../components/lights.js';
+import { createDirectionalLight, createHemisphereLight, createPointLight, createReactAreaLight, createSpotLight, } from '../components/lights.js';
 import { Loop } from '../systems/Loop.js';
 import { createControls } from '../systems/controls.js';
 
@@ -35,6 +35,7 @@ class World {
     loop.updatables.push(controls)
 
 
+    // Direct lights
     const sunLight = createDirectionalLight({color: 'red', intensity: 2});
     sunLight.position.set(-10, 10, 10)
 
@@ -48,9 +49,13 @@ class World {
     const pointLight = createPointLight({color: 'pink', intensity: 10, distance: 5, angle: 2});
     pointLight.position.set(1, 0, 0)
 
+    // Indirect lights
+    const hemisphereLight = createHemisphereLight({skyColor: 'pink', groundColor: 'skyblue', intensity: 1,});
+    // pointLight.position.set(1, 0, 0)
+
     //
     const cube = createCube({color: 'blue'});
-    const donut = createDonut();
+    const donut = createDonut({color: 'red'});
     const triangle = createTriangle();
     //
     donut.position.set(1, 0, 0)
@@ -85,6 +90,7 @@ class World {
     //
     scene.add(sunLight);
     scene.add(spotLight);
+    scene.add(hemisphereLight);
     // scene.add(pointLight);
     scene.add(windowLight);
     //

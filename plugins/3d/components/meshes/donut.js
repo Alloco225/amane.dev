@@ -5,8 +5,8 @@ function createDonut({ color = null } = {}) {
   const geometry = new THREE.TorusGeometry();
 
   // create a default (white) Basic material
-  // const material = new THREE.MeshStandardMaterial({color});
-  const material = new THREE.MeshStandardMaterial();
+  const material = new THREE.MeshStandardMaterial({color});
+  // const material = new THREE.MeshStandardMaterial();
   // const material = new THREE.MeshToonMaterial({color});
 
   // create a Mesh containing the geometry and material
