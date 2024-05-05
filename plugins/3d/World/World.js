@@ -8,19 +8,25 @@ import { Resizer } from '../systems/Resizer.js';
 import { createDonut } from '../components/meshes/donut.js';
 import { createTriangle } from '../components/meshes/triangle.js';
 import { createDirectionalLight, createPointLight, createReactAreaLight, createSpotLight, } from '../components/lights.js';
+import { Loop } from '../systems/Loop.js';
 
 // These variables are module-scoped: we cannot access them
 // from outside the module
 let camera;
 let renderer;
 let scene;
+let loop;
 
 class World {
   constructor(container) {
     camera = createCamera();
-    scene = createScene();
     renderer = createRenderer();
+    scene = createScene();
+    loop = new Loop(camera, scene, renderer);
     container.append(renderer.domElement);
+
+
+    //
 
     const sunLight = createDirectionalLight({color: 'red', intensity: 2});
     sunLight.position.set(-10, 10, 10)
@@ -45,24 +51,46 @@ class World {
     triangle.position.set(4, 0, 0)
     //
     cube.rotation.set(1, 1, 1)
+
+
+    // Game Loop
+
+    loop.updatables.push(cube)
+    loop.updatables.push(donut)
+
     //
     scene.add(sunLight);
     scene.add(spotLight);
-    scene.add(pointLight);
+    // scene.add(pointLight);
     scene.add(windowLight);
-    // 
+    //
     scene.add(cube, donut, triangle);
 
 
     // scene.background = new Color('teal')
 
     const resizer = new Resizer(container, camera, renderer);
+    resizer.onResize = ()=>{
+      // this.render();
+    }
   }
 
   render() {
     // draw a single frame
     renderer.render(scene, camera);
   }
+
+
+  start(){
+    console.log("World.start()");
+    loop.start();
+    loop.tick();
+  }
+
+  stop(){
+    loop.stop();
+  }
+
 }
 
 export { World };

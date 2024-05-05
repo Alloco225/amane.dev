@@ -11,6 +11,15 @@ function createCube({ color = null } = {}) {
   // create a Mesh containing the geometry and material
   const cube = new Mesh(geometry, material);
 
+
+  const radiansPerSecond = THREE.MathUtils.degToRad(30)
+
+  cube.tick = (delta) =>{
+    cube.rotation.x += radiansPerSecond * delta;
+    cube.rotation.y += radiansPerSecond * delta;
+    cube.rotation.z += radiansPerSecond * delta;
+  }
+
   return cube;
 }
 
