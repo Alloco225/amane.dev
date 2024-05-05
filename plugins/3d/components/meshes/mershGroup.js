@@ -13,10 +13,11 @@ function createMeshGroup() {
   // but cannot be seen itself
   const group = new Group();
 
-  const geometry = new SphereGeometry(0.25, 16, 16);
+  const geometry = new SphereGeometry(0.25, 8, 8);
 
   const material = new MeshStandardMaterial({
     color: 'indigo',
+    flatShading: true,
   });
 
   const protoSphere = new Mesh(geometry, material);
@@ -41,7 +42,7 @@ function createMeshGroup() {
 
     group.add(sphere);
   }
-  // group.scale.multiplyScalar(.5)
+  group.scale.multiplyScalar(2)
 
   group.tick = (delta) => {
     group.rotation.z += .5 * delta;
