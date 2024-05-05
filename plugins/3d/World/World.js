@@ -42,7 +42,7 @@ class World {
     pointLight.position.set(1, 0, 0)
 
     //
-    const cube = createCube({color: 'purple'});
+    const cube = createCube({color: 'blue'});
     const donut = createDonut();
     const triangle = createTriangle();
     //
