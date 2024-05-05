@@ -7,6 +7,9 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { GLTFLoader, GLTF } from 'three/examples/jsm/loaders/GLTFLoader'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader'
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader'
+
+import gsap from 'gsap';
+
 try {
 
   const scene = new THREE.Scene();
@@ -50,6 +53,36 @@ try {
 
   // });
 
+  const tl = gsap.timeline();
+  const duration = 8;
+  const ease = 'none';
+  let isAnimationFinished = false
+
+
+  async function cameraAnimation() {
+    console.log("cameraAnimation");
+    if(isAnimationFinished) return;
+    isAnimationFinished = true;
+
+    console.log("animation");
+    await tl
+      .to(camera.position, {
+        x: 10,
+        duration,
+        ease
+      })
+      .to(camera.position, {
+        y: 40,
+        z: 30,
+        duration,
+        ease,
+        onUpdate() {
+          camera.lookAt(0, 0, 0)
+        }
+      })
+
+      isAnimationFinished = false;
+  }
 
 
   function addStar() {
@@ -88,10 +121,11 @@ try {
   cube.position.x = -1
   scene.add(cube);
 
-  window.addEventListener('wheel', onScroll)
+  // window.addEventListener('wheel', onScroll)
+  window.addEventListener('wheel', cameraAnimation)
 
 
-  function onScroll(e){
+  function onScroll(e) {
     console.log("onScroll", e.deltaY)
     camera.position.z += .5 * e.deltaY;
   }

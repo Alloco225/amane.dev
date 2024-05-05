@@ -1,7 +1,6 @@
 <template>
   <div>
-    <div id="scene-container"></div>
-    <div id="info">Description</div>
+    Portfolio
   </div>
 </template>
 

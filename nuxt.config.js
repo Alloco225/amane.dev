@@ -16,8 +16,10 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    { src: '~/plugins/three.js', mode: 'client'},
-    { src: '~/plugins/test_3d.js', mode: 'client'},
+    // { src: '~/plugins/three.js', mode: 'client'},
+    // { src: '~/plugins/test_3d.js', mode: 'client'},
+    // { src: '~/plugins/3.js', mode: 'client'},
+    { src: '~/plugins/3d/main.js', mode: 'client'},
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
