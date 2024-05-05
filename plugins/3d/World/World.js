@@ -1,4 +1,4 @@
-import { Color, Vector3 } from 'three';
+import { Color, Group, Vector3 } from 'three';
 import { createCamera } from '../components/camera.js';
 import { createCube } from '../components/meshes/cube.js';
 import { createScene } from '../components/scene.js';
@@ -10,6 +10,8 @@ import { createTriangle } from '../components/meshes/triangle.js';
 import { createDirectionalLight, createHemisphereLight, createPointLight, createReactAreaLight, createSpotLight, } from '../components/lights.js';
 import { Loop } from '../systems/Loop.js';
 import { createControls } from '../systems/controls.js';
+import { createSphereBuffer } from '../components/meshes/sphere_buffer.js';
+import { createMeshGroup } from '../components/meshes/mershGroup.js';
 
 // These variables are module-scoped: we cannot access them
 // from outside the module
@@ -57,6 +59,23 @@ class World {
     const cube = createCube({color: 'blue'});
     const donut = createDonut({color: 'red'});
     const triangle = createTriangle();
+
+    //
+
+    const meshGroup = createMeshGroup();
+
+    scene.add(meshGroup);
+
+    loop.updatables.push(meshGroup)
+
+
+    // const group = new Group();
+    // for (let i = 0; i < 10; i++) {
+    //   const sphere = createSphereBuffer({radius: .25});
+    //   sphere.position.set(Math.sin(i) + .25 / 2, Math.cos(i) + 2, 0)
+    //   group.add(sphere);
+    // }
+    // scene.add(group)
     //
     donut.position.set(1, 0, 0)
     cube.position.set(2, 0, 0)
