@@ -18,8 +18,10 @@ button.addEventListener('click', launchRender)
 function launchRender(){
 
   console.log("clicked start");
-  main();
+  // main();
 }
+
+main()
 
 
 // export default { main }

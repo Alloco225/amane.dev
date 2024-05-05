@@ -3,7 +3,7 @@
     <div id="scene-container"></div>
 
     <div id="info" >Description</div>
-    <div class="bg-blue-500">
+    <div class="bg-blue-500 hidden">
 
       <button id="start-btn"  class="bg-pink-500 cursor-pointer p-4 m-5"  >Start experience</button>
     </div>
