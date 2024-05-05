@@ -13,6 +13,12 @@ function createMaterial({ color = null } = {}) {
   const texture = textureLoader.load('/assets/textures/bricks/harshbricks-albedo.png')
 
   material.map = texture
+  material.aoMap = textureLoader.load('/assets/textures/bricks/harshbricks-ao2.png')
+  material.metalnessMap = textureLoader.load('/assets/textures/bricks/harshbricks-metalness.png')
+  material.normalMap = textureLoader.load('/assets/textures/bricks/harshbricks-normal.png')
+  material.roughnessMap = textureLoader.load('/assets/textures/bricks/harshbricks-roughness.png')
+  material.bumpMap = textureLoader.load('/assets/textures/bricks/harshbricks-height5-16.png')
+
   return material;
 }
 
