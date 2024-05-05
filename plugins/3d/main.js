@@ -1,6 +1,6 @@
 import { World } from './World/World.js';
 
-function main() {
+async function main() {
   console.log("main");
 
   // Get a reference to the container element
@@ -14,6 +14,9 @@ function main() {
   // produce a single frame (render on demand)
   world.render();
   */
+
+  // complete async tasks
+  await world.init();
 
   // start the loop (produce a stream of frames)
   world.start();
@@ -29,7 +32,9 @@ function launchRender(){
   // main();
 }
 
-main()
+main().catch((err) => {
+  console.error('xx main', err);
+});
 
 
 // export default { main }

@@ -13,7 +13,7 @@ function createControls(camera, canvas) {
 
   controls.autoRotate = true;
   controls.autoRotateSpeed = 1;
-  controls.minDistance = 5;
+  controls.minDistance = 10;
   controls.maxDistance = 20;
 
   // MinMax Azimuth

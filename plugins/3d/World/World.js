@@ -13,6 +13,7 @@ import { createControls } from '../systems/controls.js';
 import { createSphereBuffer } from '../components/meshes/sphere_buffer.js';
 import { createMeshGroup } from '../components/meshes/mershGroup.js';
 import { Train } from '../components/Train/Train.js';
+import { loadBirds } from '../components/birds/birds.js';
 
 // These variables are module-scoped: we cannot access them
 // from outside the module
@@ -20,6 +21,7 @@ let camera;
 let renderer;
 let scene;
 let loop;
+let controls;
 
 class World {
   constructor(container) {
@@ -27,7 +29,7 @@ class World {
     renderer = createRenderer();
     scene = createScene();
     //
-    const controls = createControls(camera, renderer.domElement);
+    controls = createControls(camera, renderer.domElement);
 
     //
     loop = new Loop(camera, scene, renderer);
@@ -61,6 +63,24 @@ class World {
     controls.addEventListener('change', () => {
       // this.render();
     });
+  }
+
+
+  async init() {
+    // asynchronous setup here
+    // load bird models
+    const {parrot, flamingo, stork} = await loadBirds();
+    // parrot.position.z = - 10;
+    parrot.scale.multiplyScalar(.02)
+
+    flamingo.scale.multiplyScalar(.02)
+
+    stork.scale.multiplyScalar(.02)
+
+
+    scene.add(parrot, flamingo, stork)
+
+    controls.target.copy(parrot.position)
   }
 
   renderShapes(controls){
