@@ -1,5 +1,7 @@
 import { World } from './World/World.js';
 
+let world;
+
 async function main() {
   console.log("main");
 
@@ -7,7 +9,7 @@ async function main() {
   const container = document.querySelector('#scene-container');
 
   // 1. Create an instance of the World app
-  const world = new World(container);
+  world = new World(container);
 
 
   /*
@@ -20,16 +22,30 @@ async function main() {
 
   // start the loop (produce a stream of frames)
   world.start();
+
+  //
+
+  setUpEventListeners();
 }
 
 
-let button = document.querySelector('#start-btn')
-button.addEventListener('click', launchRender)
+function setUpEventListeners(){
+
+  let button = document.querySelector('#start-btn')
+  button?.addEventListener('click', launchRender)
+
+  document.querySelector('#focusNext-btn').addEventListener('click', focusNext)
+}
 
 function launchRender(){
 
   console.log("clicked start");
   // main();
+}
+
+function focusNext(){
+  console.log("focusNext")
+  world.focusNext();
 }
 
 main().catch((err) => {

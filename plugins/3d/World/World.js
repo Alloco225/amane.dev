@@ -23,6 +23,7 @@ let scene;
 let loop;
 let controls;
 
+let focusedBirb;
 class World {
   constructor(container) {
     camera = createCamera();
@@ -69,7 +70,10 @@ class World {
   async init() {
     // asynchronous setup here
     // load bird models
-    const {parrot, flamingo, stork} = await loadBirds();
+    const {parrot , flamingo, stork} = await loadBirds();
+    this.parrot = parrot;
+    this.flamingo = flamingo;
+    this.stork = stork;
     // parrot.position.z = - 10;
     parrot.scale.multiplyScalar(.02)
 
@@ -80,7 +84,18 @@ class World {
 
     scene.add(parrot, flamingo, stork)
 
-    controls.target.copy(parrot.position)
+    focusedBirb = this.parrot
+
+    controls.target.copy(focusedBirb.position)
+  }
+
+
+  focusNext(){
+    if (focusedBirb == this.parrot) focusedBirb = this.flamingo
+    if (focusedBirb == this.flamingo) focusedBirb = this.stork
+    if (focusedBirb == this.stork) focusedBirb = this.parrot
+    console.log("focusBirb", focusedBirb)
+    camera.lookAt(focusedBirb);
   }
 
   renderShapes(controls){
