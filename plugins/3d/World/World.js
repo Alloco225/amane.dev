@@ -17,6 +17,8 @@ import { loadBirds } from '../components/birds/birds.js';
 import { loadGlasses } from '../components/glasses/glasses.js';
 import { NumberKeyframeTrack, VectorKeyframeTrack } from "three";
 
+const facemesh = require('@tensorflow-models/facemesh');
+
 
 // These variables are module-scoped: we cannot access them
 // from outside the module
@@ -28,14 +30,35 @@ let controls;
 
 let focusedBirb;
 
+let glasses;
+let model;
+let cameraFrame;
+
 let meManagerModel;
 let meDevModel;
 let meDesignerModel;
 
+let detectFacesInterval;
+
+let glassesKeyPoints = { midEye: 168, leftEye: 143, noseBottom: 2, rightEye: 372 };
+
 class World {
   constructor(container) {
-    camera = createCamera();
+    camera = createCamera(
+      {
+        fov: 45,
+        aspect: 1,
+        near: 0.1,
+        far: 2000
+      }
+    );
+    // renderer = createRenderer({
+    //   // canvas: canvasElement,
+    //   alpha: true
+    // });
+    // camera = createCamera();
     renderer = createRenderer();
+    renderer.domElement.id = '3js-canvas'
     scene = createScene();
     //
     controls = createControls(camera, renderer.domElement);
@@ -79,7 +102,7 @@ class World {
     // scene.background = new Color('teal')
 
     const resizer = new Resizer(container, camera, renderer);
-    resizer.onResize = ()=>{
+    resizer.onResize = () => {
       // this.render();
     }
 
@@ -94,11 +117,109 @@ class World {
     // await this.initBirbs();
   }
 
-  async initBirbs(){
+  async initAR(videoElement) {
+    console.log("initAR", videoElement)
+    const videoHeight = videoElement.height;
+    const videoWidth = videoElement.width;
+
+    renderer.setSize(videoWidth, videoHeight);
+    renderer.setClearColor(0x000000, 0);
+
+    camera.position.x = videoWidth / 2;
+    camera.position.y = -videoHeight / 2;
+    camera.position.z = -(videoHeight / 2) / Math.tan(45 / 2);
+    camera.lookAt({ x: videoWidth / 2, y: -videoHeight / 2, z: 0, isVector3: true });
+  }
+
+  async executeAR(webcamElement) {
+    console.log("executeAR")
+    webcamElement.play();
+    faceLandmarksDetection.load(faceLandmarksDetection.SupportedPackages.mediapipeFacemesh)
+      .then(mdl => {
+        console.log("model", mdl)
+        model = mdl;
+        clearInterval(detectFacesInterval);
+        detectFacesInterval =
+          setInterval(() => {
+
+            cameraFrame = detectFaces();
+          }, 1000);
+      });
+
+    async function detectFaces() {
+      await model.estimateFaces
+        ({
+          input: webcamElement,
+          returnTensors: false,
+          flipHorizontal: false,
+          predictIrises: false
+        }).then(faces => {
+          console.log("faces", faces)
+          drawglasses(faces).then(() => {
+
+            // cameraFrame = requestAnimFrame(detectFaces);
+          });
+        });
+
+
+
+      async function drawglasses(faces) {
+        console.log("drawGlasses", faces)
+
+        for (let i = 0; i < faces.length; i++) {
+          let face = faces[i];
+          if (typeof glasses !== "undefined" && typeof face !== "undefined") {
+            let pointMidEye = face.scaledMesh[glassesKeyPoints.midEye];
+            let pointleftEye = face.scaledMesh[glassesKeyPoints.leftEye];
+            let pointNoseBottom = face.scaledMesh[glassesKeyPoints.noseBottom];
+            let pointrightEye = face.scaledMesh[glassesKeyPoints.rightEye];
+
+            glasses.position.x = pointMidEye[0];
+            glasses.position.y = -pointMidEye[1] + parseFloat(glasses.position.y);
+            glasses.position.z = -camera.position.z + pointMidEye[2];
+
+            glasses.up.x = pointMidEye[0] - pointNoseBottom[0];
+            glasses.up.y = -(pointMidEye[1] - pointNoseBottom[1]);
+            glasses.up.z = pointMidEye[2] - pointNoseBottom[2];
+            const length = Math.sqrt(glasses.up.x ** 2 + glasses.up.y ** 2 + glasses.up.z ** 2);
+            glasses.up.x /= length;
+            glasses.up.y /= length;
+            glasses.up.z /= length;
+
+            const eyeDist = Math.sqrt(
+              (pointleftEye[0] - pointrightEye[0]) ** 2 +
+              (pointleftEye[1] - pointrightEye[1]) ** 2 +
+              (pointleftEye[2] - pointrightEye[2]) ** 2
+            );
+            glasses.scale.x = eyeDist * parseFloat(glasses.scale.x);
+            glasses.scale.y = eyeDist * parseFloat(glasses.scale.y);
+            glasses.scale.z = eyeDist * parseFloat(glasses.scale.z);
+
+            glasses.rotation.y = Math.PI;
+            glasses.rotation.z = Math.PI / 2 - Math.acos(glasses.up.x);
+
+            glasses.position.x /= 100
+            glasses.position.y /= 100
+            glasses.position.z /= 100
+
+            glasses.scale.x /= 100
+            glasses.scale.y /= 100
+            glasses.scale.z /= 100
+
+            console.log("glasses", glasses.position, glasses.scale);
+            // renderer.render(scene, camera);
+          }
+        }
+      }
+
+    }
+  }
+
+  async initBirbs() {
 
     // asynchronous setup here
     // load bird models
-    const {parrot , flamingo, stork} = await loadBirds();
+    const { parrot, flamingo, stork } = await loadBirds();
     this.parrot = parrot;
     this.flamingo = flamingo;
     this.stork = stork;
@@ -117,24 +238,24 @@ class World {
     controls.target.copy(parrot.position)
   }
 
-  async initGlasses(){
+  async initGlasses() {
 
     // asynchronous setup here
     // load bird models
-    const {roundedRectangleGlasses} = await loadGlasses();
-
-    roundedRectangleGlasses.scale.multiplyScalar(3)
+    const { roundedRectangleGlasses } = await loadGlasses();
+    glasses = roundedRectangleGlasses;
+    glasses.scale.multiplyScalar(3)
 
 
     scene.add(roundedRectangleGlasses)
-    // loop.updatables.push(parrot, flamingo, stork)
+    loop.updatables.push(glasses)
 
 
     // controls.target.copy(roundedRectangleGlasses.position)
   }
 
 
-  focusNext(){
+  focusNext() {
     if (focusedBirb == this.parrot) focusedBirb = this.flamingo
     if (focusedBirb == this.flamingo) focusedBirb = this.stork
     if (focusedBirb == this.stork) focusedBirb = this.parrot
@@ -142,7 +263,7 @@ class World {
     camera.lookAt(focusedBirb);
   }
 
-  renderShapes(controls){
+  renderShapes(controls) {
 
     const cube = createCube({ color: 'blue' });
     const donut = createDonut({ color: 'red' });
@@ -166,7 +287,7 @@ class World {
 
     controls.target.copy(cube.position)
   }
-  renderLights(){
+  renderLights() {
 
     // Direct lights
     const sunLight = createDirectionalLight({ color: 'red', intensity: 2 });
@@ -194,7 +315,7 @@ class World {
     scene.add(windowLight);
   }
 
-  renderGroup(){
+  renderGroup() {
 
     // const group = new Group();
     // for (let i = 0; i < 10; i++) {
@@ -206,7 +327,7 @@ class World {
     //
   }
 
-  renderMeshGroupSpheres(){
+  renderMeshGroupSpheres() {
     const meshGroup = createMeshGroup();
 
     scene.add(meshGroup);
@@ -215,7 +336,7 @@ class World {
   }
 
   // Train
-  renderTrain(){
+  renderTrain() {
     // Train
     const train = new Train();
     train.scale.multiplyScalar(.5)
@@ -231,13 +352,13 @@ class World {
   }
 
 
-  start(){
+  start() {
     console.log("World.start()");
     loop.start();
     loop.tick();
   }
 
-  stop(){
+  stop() {
     loop.stop();
   }
 

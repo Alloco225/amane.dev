@@ -1,6 +1,7 @@
 <template>
   <div class="body">
       <div id="scene-container"></div>
+      <video id="webcam" autoplay playsinline width="100%" height="100%"></video>
   </div>
 </template>
 
@@ -26,7 +27,7 @@ body {
   height: 100%;
   left: 0;
   top: 0;
-  z-index: -10;
+  z-index: 10;
 }
 
 </style>

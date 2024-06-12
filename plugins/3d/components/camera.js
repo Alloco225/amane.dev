@@ -1,11 +1,23 @@
 import { PerspectiveCamera } from 'three';
 
-function createCamera() {
+function createCamera(options = {
+  fov: 35,
+  aspect: 1,
+  near: 0.1,
+  far: 100
+}) {
+  // const camera = new PerspectiveCamera(options);
+  // const camera = new PerspectiveCamera(
+  //   35,
+  //   1,
+  //   0.1,
+  //   100
+  // );
   const camera = new PerspectiveCamera(
-    35, // fov = Field Of View
-    1, // aspect ratio (dummy value)
-    0.1, // near clipping plane
-    100, // far clipping plane
+    options.fov,
+    options.aspect,
+    options.near,
+    options.far
   );
 
   // move the camera back so we can view the scene

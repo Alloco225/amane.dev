@@ -11,7 +11,7 @@ function createControls(camera, canvas) {
   // controls.enableZoom = false;
   // controls.enablePan = false;
 
-  controls.autoRotate = true;
+  // controls.autoRotate = true;
   controls.autoRotateSpeed = 1;
   controls.minDistance = 10;
   controls.maxDistance = 20;
