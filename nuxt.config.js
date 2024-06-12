@@ -10,12 +10,12 @@ export default {
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
     script: [
-      {
-        "src": "https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.6/dat.gui.min.js"
-      },
-      {
-        "src": "https://cdnjs.cloudflare.com/ajax/libs/stats.js/r16/Stats.min.js",
-      },
+
+    { src:"https://unpkg.com/@tensorflow/tfjs-core@2.4.0/dist/tf-core.min.js" },  
+    { src:"https://unpkg.com/@tensorflow/tfjs-converter@2.4.0/dist/tf-converter.min.js" },  
+    { src:"https://unpkg.com/@tensorflow/tfjs-backend-webgl@2.4.0/dist/tf-backend-webgl.min.js" },  
+    { src:"https://unpkg.com/@tensorflow/tfjs-backend-cpu@2.4.0/dist/tf-backend-cpu.min.js" },  
+    { src:"https://unpkg.com/@tensorflow-models/face-landmarks-detection@0.0.1/dist/face-landmarks-detection.min.js" }, 
       // {
       //   src: '/face-api/face-api.js'
       // },
