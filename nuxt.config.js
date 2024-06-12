@@ -9,6 +9,21 @@ export default {
       { name: 'format-detection', content: 'telephone=no' },
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+    script: [
+      {
+        "src": "https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.6/dat.gui.min.js"
+      },
+      {
+        "src": "https://cdnjs.cloudflare.com/ajax/libs/stats.js/r16/Stats.min.js",
+      },
+      // {
+      //   src: '/face-api/face-api.js'
+      // },
+      // {
+      //   src: "https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"
+      // },
+      // { src: "https://cdn.jsdelivr.net/npm/@tensorflow-models/blazeface" }
+    ]
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
@@ -19,7 +34,9 @@ export default {
     // { src: '~/plugins/three.js', mode: 'client'},
     // { src: '~/plugins/test_3d.js', mode: 'client'},
     // { src: '~/plugins/3.js', mode: 'client'},
-    { src: '~/plugins/3d/main.js', mode: 'client'},
+    // { src: '~/plugins/face-api/face-api.js', mode: 'client'},
+    { src: '~/plugins/3d/main.js', mode: 'client' },
+    // { src: '~/plugins/3d/tensor.js', mode: 'client' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

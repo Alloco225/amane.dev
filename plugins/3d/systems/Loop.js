@@ -30,7 +30,9 @@ class Loop {
     const delta = clock.getDelta();
     //
     for(const object of this.updatables){
-      object.tick(delta);
+      if(!object || object === 'undefined') continue
+      if(object.hasOwnProperty('tick') && typeof object.tick === 'function')
+      object?.tick(delta);
     }
   }
 }

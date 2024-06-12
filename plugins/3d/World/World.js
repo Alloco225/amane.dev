@@ -1,4 +1,4 @@
-import { Color, Group, Vector3 } from 'three';
+import { CircleGeometry, Color, ConeGeometry, Group, Mesh, MeshStandardMaterial, Vector3 } from 'three';
 import { createCamera } from '../components/camera.js';
 import { createCube } from '../components/meshes/cube.js';
 import { createScene } from '../components/scene.js';
@@ -14,6 +14,11 @@ import { createSphereBuffer } from '../components/meshes/sphere_buffer.js';
 import { createMeshGroup } from '../components/meshes/mershGroup.js';
 import { Train } from '../components/Train/Train.js';
 import { loadBirds } from '../components/birds/birds.js';
+import { NumberKeyframeTrack, VectorKeyframeTrack } from "three";
+import {getCameraFeed} from '../components/camera_feed/getCameraFeed.js';
+
+
+
 
 // These variables are module-scoped: we cannot access them
 // from outside the module
@@ -24,10 +29,17 @@ let loop;
 let controls;
 
 let focusedBirb;
+
+let meManagerModel;
+let meDevModel;
+let meDesignerModel;
+
 class World {
   constructor(container) {
     camera = createCamera();
     renderer = createRenderer();
+    renderer.domElement.id = 'threejs-canvas';
+
     scene = createScene();
     //
     controls = createControls(camera, renderer.domElement);
@@ -54,6 +66,20 @@ class World {
     //
 
 
+
+
+    const times = [0, 1, 2, 3, 4];
+    const values = [0, 1, 0, 1, 0];
+
+    const opacityKF = new NumberKeyframeTrack(".material.opacity", times, values);
+
+
+
+    const vTimes = [0, 3, 6];
+    const vValues = [0, 0, 0, 2, 2, 2, 0, 0, 0];
+
+    const positionKF = new VectorKeyframeTrack(".position", vTimes, vValues);
+
     // scene.background = new Color('teal')
 
     const resizer = new Resizer(container, camera, renderer);
@@ -66,11 +92,19 @@ class World {
     });
   }
 
+  async getContext(){
+    return renderer.getContext();
+  }
 
   async init() {
     // asynchronous setup here
     // load bird models
-    const {parrot , flamingo, stork} = await loadBirds();
+
+  }
+
+  async initBirbs(){
+
+    const { parrot, flamingo, stork } = await loadBirds();
     this.parrot = parrot;
     this.flamingo = flamingo;
     this.stork = stork;
@@ -83,6 +117,7 @@ class World {
 
 
     scene.add(parrot, flamingo, stork)
+    loop.updatables.push(parrot, flamingo, stork)
 
     focusedBirb = this.parrot
 

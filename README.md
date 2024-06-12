@@ -10,3 +10,8 @@
 - zoom on pc section
 - smooth animation on click when opening notes
 - 
+
+
+### 3d 
+
+draw camera path

@@ -1,16 +1,25 @@
 <template>
-  <div>
-    <div id="scene-container"></div>
-
-    <main>
-      <div id="info">Description</div>
-      <div class="bg-blue-500 flex justify-center gap-3 p-3">
-        <!-- <button id="start-btn"  class="bg-pink-500 cursor-pointer p-4 m-5"  >Start experience</button> -->
-        <button id="focusNext-btn" class="bg-pink-500 cursor-pointer px-2 py-1">
-          Focus Next
-        </button>
+  <div class="body">
+    <!-- <div id="stats"></div> -->
+    <div id="main">
+      <div id="scene-container"></div>
+      <div class="container">
+        <div class="canvas-wrapper">
+          <!-- <canvas id="output"></canvas> -->
+          <video
+            id="video"
+            playsinline
+            style="
+              -webkit-transform: scaleX(-1);
+              transform: scaleX(-1);
+              visibility: hidden;
+              width: 100%;
+              height: 100%;
+            "
+          ></video>
+        </div>
       </div>
-    </main>
+    </div>
   </div>
 </template>
 
@@ -26,7 +35,10 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
+body {
+  margin: 0;
+}
 #scene-container {
   position: fixed;
   width: 100%;
@@ -36,12 +48,18 @@ export default {
   z-index: -10;
 }
 
-/* #info {
-	position: absolute;
-	top: 10px;
-	width: 100%;
-	text-align: center;
-	z-index: 100;
-	display:block;
-} */
+#stats {
+  position: relative;
+  width: 100%;
+  height: 80px;
+}
+
+#main {
+  position: relative;
+  margin: 0;
+}
+
+#canvas-wrapper {
+  position: relative;
+}
 </style>

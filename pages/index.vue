@@ -9,3 +9,10 @@ export default {
   name: 'IndexPage',
 }
 </script>
+
+<style>
+
+html, body, #__nuxt, #__layout {
+  height: 100vh;
+}
+</style>
